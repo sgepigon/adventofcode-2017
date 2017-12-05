@@ -1,5 +1,6 @@
 (ns adventofcode-2017.day2
-  (:require [clojure.string :as string]))
+  (:require [clojure.string :as string]
+            [clojure.math.combinatorics :as combo]))
 
 (defn- str->spreadsheet
   [s]
@@ -7,26 +8,47 @@
        (map #(string/split % #"\t"))
        (map (fn [coll] (map (fn [s] (Integer/parseInt s)) coll)))))
 
-
 (def spreadsheet (str->spreadsheet (slurp "resources/day2-input.txt"))) ; 16x16
-
-(def part-1 {[[5 1 9 5]                 ; 8 + 4 + 6 = 18
-              [7 5 3]
-              [2 4 6 8]] 18})
 
 (defn min-max-diff
   "Return the difference between the largest value and the smallest value."
   [row]
   (- (apply max row) (apply min row)))
 
+(defn evenly-divisible-quotient
+  "Return the quotient of the only two numbers in each row where one evenly
+  divides the other."
+  [row]
+  (->> (combo/combinations row 2)
+       (map (fn [pair] (/ (apply max pair) (apply min pair))))
+       (filter int?)
+       first))
+
 (defn checksum
   "Return the sum of all the differences between the largest and smallest value in
   a row."
-  [spreadsheet]
-  (apply + (map min-max-diff spreadsheet)))
+  [f spreadsheet]
+  (apply + (map f spreadsheet)))
 
-(= (map checksum (keys part-1))
+(def part-1 {[[5 1 9 5]                 ; 8 + 4 + 6 = 18
+              [7 5 3]
+              [2 4 6 8]] 18})
+
+(def part-2 {[[5 9 2 8]                  ; 4 + 3 + 2 = 9
+              [9 4 7 3]
+              [3 8 6 5]] 9})
+
+
+(= (map #(checksum min-max-diff %) (keys part-1))
    (vals part-1))
+;; => true
 
-(checksum spreadsheet)
+(= (map #(checksum evenly-divisible-quotient %) (keys part-2))
+   (vals part-2))
+;; => true
+
+(checksum min-max-diff spreadsheet)
 ;; => 44887
+
+(checksum evenly-divisible-quotient spreadsheet)
+;; => 242
