@@ -1,5 +1,6 @@
 (ns adventofcode-2017.day1
-  (:require [clojure.string :as string]))
+  (:require [adventofcode-2017.utils :as utils]
+            [clojure.string :as string]))
 
 (def captcha (string/trim-newline (slurp "resources/day1-input.txt")))
 
@@ -37,8 +38,7 @@
              "1234" 0
              "91212129" 9})
 
-(= (map #(solve pairs %) (keys part-1))
-   (vals part-1))
+(utils/check-examples #(solve pairs %) part-1)
 ;; => true
 
 (def part-2 {"1212" 6
@@ -47,9 +47,8 @@
              "123123" 12
              "12131415" 4})
 
-(= (map #(* (solve halfway-pairs %) 2)  ; (* 2) because the pairs are reflected
-        (keys part-2))
-   (vals part-2))
+; (* 2) because the pairs are reflected
+(utils/check-examples #(* (solve halfway-pairs %) 2) part-2)
 ;; => true
 
 (map #(% captcha) [#(solve pairs %)

@@ -1,6 +1,7 @@
 (ns adventofcode-2017.day2
-  (:require [clojure.string :as string]
-            [clojure.math.combinatorics :as combo]))
+  (:require [adventofcode-2017.utils :as utils]
+            [clojure.math.combinatorics :as combo]
+            [clojure.string :as string]))
 
 (defn- str->spreadsheet
   [s]
@@ -39,12 +40,10 @@
               [3 8 6 5]] 9})
 
 
-(= (map #(checksum min-max-diff %) (keys part-1))
-   (vals part-1))
+(utils/check-examples #(checksum min-max-diff %) part-1)
 ;; => true
 
-(= (map #(checksum evenly-divisible-quotient %) (keys part-2))
-   (vals part-2))
+(utils/check-examples #(checksum evenly-divisible-quotient %) part-2)
 ;; => true
 
 (checksum min-max-diff spreadsheet)

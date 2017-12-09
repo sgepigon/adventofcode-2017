@@ -1,5 +1,6 @@
 (ns adventofcode-2017.day4
-  (:require [clojure.spec.alpha :as spec]
+  (:require [adventofcode-2017.utils :as utils]
+            [clojure.spec.alpha :as spec]
             [clojure.string :as string]
             [orchestra.spec.test :as spec.test]))
 
@@ -20,8 +21,7 @@
              "aa bb cc dd aa" false
              "aa bb cc dd aaa" true})
 
-(= (map (comp valid-passphrase? str->coll-of-strs) (keys part-1))
-   (vals part-1))
+(utils/check-examples (comp valid-passphrase? str->coll-of-strs) part-1)
 ;; => true
 
 (frequencies (map (comp valid-passphrase? str->coll-of-strs) passphrases))
@@ -38,8 +38,8 @@
              "iiii oiii ooii oooi oooo" true
              "oiii ioii iioi iiio" false})
 
-(= (map (comp valid-passphrase? #(map sort-letters %) str->coll-of-strs) (keys part-2))
-   (vals part-2))
+(utils/check-examples (comp valid-passphrase? #(map sort-letters %) str->coll-of-strs)
+                      part-2)
 ;; => true
 
 (frequencies (map (comp valid-passphrase? #(map sort-letters %) str->coll-of-strs) passphrases))
